@@ -554,3 +554,7 @@ body::after {
 .hs__tear path { fill: #f6f1ee; filter: drop-shadow(1px 0 1px rgba(0, 0, 0, .25)); }
 .hero__visual:hover .hs__half--color img { filter: saturate(1.15) brightness(1.05); }
 .hero__title .ch { will-change: transform; }
+
+/* hero tagline: more air between lines */
+.hero__tag { line-height: 1.04; }
+.hero__tag .line + .line { margin-top: .06em; }
