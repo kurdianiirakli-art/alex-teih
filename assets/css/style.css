@@ -564,3 +564,50 @@ body::after {
   .hero__brand, .hero__tag { display: none; }
   .hero__visual { height: calc(100% - 76px); max-height: 88vh; }
 }
+
+/* ==========================================================
+   v3 — full-bleed dark hero (split screen like the reference)
+   ========================================================== */
+.hero {
+  --h-dark: #0b0b0b;   /* left / colour side: matches the studio backdrop */
+  --h-gray: #1c1c1c;   /* right / b&w side: a slightly lifted grey wall */
+  --h-ink: #f4efec;
+  --h-muted: rgba(244, 239, 236, .45);
+  background: var(--h-dark); color: var(--h-ink);
+}
+.hero__visual {
+  position: absolute; inset: 0; left: 0; right: 0; margin: 0;
+  height: auto; max-width: none; max-height: none; aspect-ratio: auto;
+  background: none; clip-path: none !important;
+}
+.hs__half { background: var(--h-dark); }
+.hs__half--mono { background: var(--h-gray); filter: grayscale(1) contrast(1.06) brightness(1.1); }
+.hs__half--mono img { transform: none; }
+.hs__img {
+  position: absolute; left: 0; right: auto; bottom: 0; margin: 0;
+  height: 94%; width: auto !important; aspect-ratio: 4/5; max-width: none;
+  object-fit: cover; object-position: center top;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%);
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%);
+          mask-composite: intersect;
+}
+.hs__tear path { fill: #ece7e2; filter: drop-shadow(0 0 2px rgba(0, 0, 0, .6)); }
+
+/* type on dark */
+.hero__brand, .hero__tag { color: var(--h-ink); mix-blend-mode: normal; }
+.hero__w2 { mix-blend-mode: normal; color: #fff; }
+.hero__bottom .bracket-link { mix-blend-mode: normal; color: var(--h-ink); }
+.hero__bottom .bracket-link:hover { color: var(--accent); }
+.hero__meta { color: var(--h-muted); }
+.hero__index li { color: var(--h-muted); }
+.hero__index li.is-on, .hero__index button:hover { color: var(--h-ink); }
+.hi__bar { background: rgba(244, 239, 236, .16); }
+.hero__count { color: var(--h-muted); }
+.hero__count span { color: var(--h-ink); }
+.hero__scroll { color: var(--h-ink); }
+.hero__title { font-size: clamp(60px, 9vw, 170px); }
+
+@media (max-width: 760px) {
+  .hs__img { height: 82%; }
+}

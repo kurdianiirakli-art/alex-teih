@@ -288,7 +288,7 @@
       'ball-gown': ['bg-21', .37],
       'slim-silhouette': ['slim-9', .42],
       'white-nights': ['wn-1', .64],
-      'seductive-shimmer': ['ss-11', .67],
+      'seductive-shimmer': ['ss-9', .40],
       'endlessly-ethereal': ['ee-4', .43],
     };
     const visual = $('#heroVisual');
@@ -304,14 +304,19 @@
       el.dataset.tear = tear;
       el.dataset.seed = Math.round(f.length * 13 + tear * 100);
       el.innerHTML = `
-        <div class="hs__half hs__half--color"><img src="assets/img/${f}.jpg" alt="${c.name} — Alex Teih" /></div>
-        <div class="hs__half hs__half--mono"><img src="assets/img/${f}.jpg" alt="" aria-hidden="true" /></div>
+        <div class="hs__half hs__half--color"><img class="hs__img" src="assets/img/${f}.jpg" alt="${c.name} — Alex Teih" /></div>
+        <div class="hs__half hs__half--mono"><img class="hs__img" src="assets/img/${f}.jpg" alt="" aria-hidden="true" /></div>
         <svg class="hs__tear" viewBox="0 0 40 1000" preserveAspectRatio="none" aria-hidden="true"><path /></svg>`;
       return el;
     };
     const buildTear = el => {
       const W = visual.clientWidth, H = visual.clientHeight;
-      const cx = W * +el.dataset.tear;
+      // tear sits at a fraction of the photo, but runs the full height of the screen
+      // centre both copies of the photo (works even when it is wider than the screen)
+      const imgs = $$('.hs__img', el), ph = imgs[0];
+      const imgLeft = Math.round((W - ph.offsetWidth) / 2);
+      imgs.forEach(im => { im.style.left = imgLeft + 'px'; });
+      const cx = imgLeft + ph.offsetWidth * +el.dataset.tear;
       const pts = tornPoints(46, 1, +el.dataset.seed);
       const left = pts.map(([t, r]) => [10 + r * 18, t * 1000]);
       const right = pts.map(([t, r], i) => [left[i][0] + 4 + ((i * 7) % 5), t * 1000]).reverse();
@@ -379,12 +384,11 @@
     visual.addEventListener('click', () => goTo(heroLink.href));
 
     // torn top edge on the hero photo
-    const heroTop = tornPoints(40, 1, 11).map(([t, r]) => `${t * 100}% ${r * 14}px`);
-    visual.style.clipPath = `polygon(${heroTop.join(',')}, 100% 100%, 0% 100%)`;
+    // (full-bleed hero: no frame edge)
 
     /* hero mouse parallax */
     if (!isTouch && hasGSAP) {
-      const hx = gsap.quickTo(visual, 'x', { duration: 1.2, ease: 'power3' });
+      const hx = () => {};
       const bx = gsap.quickTo('.hero__brand', 'x', { duration: 1.4, ease: 'power3' });
       const tx = gsap.quickTo('.hero__tag', 'x', { duration: 1.4, ease: 'power3' });
       $('#hero').addEventListener('pointermove', e => {
@@ -425,7 +429,7 @@
       tl.to(['.loader__word', '.loader__pct', '.loader__tag'], { opacity: 0, y: -20, duration: .5, ease: 'power2.in' })
         .to(stack, { scale: 1.6, opacity: 0, duration: .9, ease: 'expo.inOut' }, .1)
         .to(loader, { clipPath: 'inset(0 0 100% 0)', duration: 1, ease: 'expo.inOut' }, .3)
-        .from(visual, { yPercent: 14, scale: .92, duration: 1.4, ease: 'expo.out' }, .7)
+        .from(visual, { yPercent: 8, opacity: 0, duration: 1.4, ease: 'expo.out' }, .6)
         .from('.hero__brand .line > span, .hero__tag .line > span', { yPercent: 110, duration: 1.1, stagger: .08, ease: 'expo.out' }, .9)
         .from($$('.ch', heroTitle), { yPercent: 110, opacity: 0, duration: .9, stagger: .025, ease: 'expo.out' }, 1)
         .from(['.hero__meta', '.hero__count', '.hero__bottom .bracket-link', '.hero__scroll'], { opacity: 0, y: 14, duration: .8, stagger: .06, clearProps: 'transform' }, 1.2)
@@ -435,7 +439,7 @@
     /* ---------- scroll animations ---------- */
     if (hasGSAP && !reduced) {
       // hero exit
-      gsap.to(visual, { yPercent: 12, scale: .94, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.to(visual, { yPercent: 16, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
       gsap.to(['.hero__brand', '.hero__tag'], { yPercent: -60, opacity: .2, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
 
       // marquee: constant drift + scroll velocity boost
