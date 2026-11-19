@@ -281,43 +281,68 @@
     /* footer collections */
     $('#footerCollections').innerHTML = C.map(c => `<a class="u-link" href="collection.html?c=${c.slug}">${c.name.toUpperCase()}</a>`).join('');
 
-    /* hero tear */
-    const visual = $('#heroVisual'), mono = $('#heroMono'), tearSvg = $('#heroTear'), tearPath = $('#heroTearPath');
-    const pts = tornPoints(46, 1, 7);
-    const buildTear = () => {
-      const W = visual.clientWidth, H = visual.clientHeight;
-      const cx = W * .5, amp = 26;
-      // svg strip (paper edge): left edge jagged, right edge jagged offset
-      const left = pts.map(([t, r]) => [10 + r * 18, t * 1000]);
-      const right = pts.map(([t, r], i) => [left[i][0] + 4 + ((i * 7) % 5), t * 1000]).reverse();
-      tearPath.setAttribute('d', 'M' + [...left, ...right].map(p => p.join(',')).join('L') + 'Z');
-      tearSvg.style.left = (cx - 20) + 'px';
-      // mono half clip follows right edge of the strip (40 svg units -> 40px)
-      const poly = pts.map(([t, r], i) => `${cx - 20 + 10 + r * 18 + 4 + ((i * 7) % 5)}px ${t * H}px`);
-      mono.style.clipPath = `polygon(${poly.join(',')}, ${W}px ${H}px, ${W}px 0px)`;
-      void amp;
+    /* ---------- hero slides: photo + torn split placed beside the face ---------- */
+    // [image, tear position as fraction of width] — tear passes next to the head, never through the face
+    const HERO = {
+      'haute-couture': ['hc-1', .67],
+      'ball-gown': ['bg-21', .37],
+      'slim-silhouette': ['slim-9', .42],
+      'white-nights': ['wn-1', .64],
+      'seductive-shimmer': ['ss-11', .67],
+      'endlessly-ethereal': ['ee-4', .43],
     };
-    buildTear(); addEventListener('resize', buildTear);
-
-    /* hero collection cycle */
+    const visual = $('#heroVisual');
     const heroTitle = $('#heroTitle'), heroLink = $('#heroLink');
-    const imgA = $('#heroImgA'), imgB = $('#heroImgB');
     const heroSeq = [1, 0, 2, 4, 3, 5]; // start with Haute Couture
     let heroI = 0;
-    C.forEach(c => { const im = new Image(); im.src = c.cover; });
+    Object.values(HERO).forEach(([f]) => { const im = new Image(); im.src = `assets/img/${f}.jpg`; });
+
+    const makeSlide = c => {
+      const [f, tear] = HERO[c.slug];
+      const el = document.createElement('div');
+      el.className = 'hs';
+      el.dataset.tear = tear;
+      el.dataset.seed = Math.round(f.length * 13 + tear * 100);
+      el.innerHTML = `
+        <div class="hs__half hs__half--color"><img src="assets/img/${f}.jpg" alt="${c.name} — Alex Teih" /></div>
+        <div class="hs__half hs__half--mono"><img src="assets/img/${f}.jpg" alt="" aria-hidden="true" /></div>
+        <svg class="hs__tear" viewBox="0 0 40 1000" preserveAspectRatio="none" aria-hidden="true"><path /></svg>`;
+      return el;
+    };
+    const buildTear = el => {
+      const W = visual.clientWidth, H = visual.clientHeight;
+      const cx = W * +el.dataset.tear;
+      const pts = tornPoints(46, 1, +el.dataset.seed);
+      const left = pts.map(([t, r]) => [10 + r * 18, t * 1000]);
+      const right = pts.map(([t, r], i) => [left[i][0] + 4 + ((i * 7) % 5), t * 1000]).reverse();
+      $('path', el).setAttribute('d', 'M' + [...left, ...right].map(p => p.join(',')).join('L') + 'Z');
+      $('.hs__tear', el).style.left = (cx - 20) + 'px';
+      const poly = pts.map(([t, r], i) => `${cx - 10 + r * 18 + 4 + ((i * 7) % 5)}px ${t * H}px`);
+      $('.hs__half--mono', el).style.clipPath = `polygon(${poly.join(',')}, ${W}px ${H}px, ${W}px 0px)`;
+    };
+    addEventListener('resize', () => $$('.hs', visual).forEach(buildTear));
+
     const splitWord = w => [...w].map(ch => `<span class="ch">${ch}</span>`).join('');
+    let heroBusy = null;
+    const dropSlides = list => list.forEach(o => o.parentNode && o.parentNode.removeChild(o));
     const setHero = (c, animate) => {
       const [w1, ...rest] = c.name.toUpperCase().split(' ');
       const html = `<span class="hero__w1 accent">${splitWord(w1)}</span> <span class="hero__w2">${splitWord(rest.join(' '))}</span>`;
-      if (!animate || !hasGSAP) { heroTitle.innerHTML = html; imgA.src = imgB.src = c.cover; heroLink.href = `collection.html?c=${c.slug}`; return; }
-      const tl = gsap.timeline();
-      tl.to($$('.ch', heroTitle), { yPercent: -110, opacity: 0, duration: .5, stagger: .015, ease: 'power3.in' })
-        .to([imgA, imgB], { opacity: 0, scale: 1.04, duration: .5, ease: 'power2.in' }, 0)
-        .add(() => {
-          heroTitle.innerHTML = html; imgA.src = imgB.src = c.cover; heroLink.href = `collection.html?c=${c.slug}`;
-        })
-        .fromTo(() => $$('.ch', heroTitle), { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .7, stagger: .02, ease: 'expo.out' })
-        .fromTo([imgA, imgB], { opacity: 0, scale: 1.06 }, { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' }, '<');
+      if (heroBusy) heroBusy.progress(1);
+      const old = $$('.hs', visual);
+      const slide = makeSlide(c);
+      visual.appendChild(slide);
+      buildTear(slide);
+      heroLink.href = `collection.html?c=${c.slug}`;
+      if (!animate || !hasGSAP || reduced) { heroTitle.innerHTML = html; dropSlides(old); return; }
+      // page flip: the new card unrolls from the bottom edge upwards over the current one
+      const tl = heroBusy = gsap.timeline({ onComplete: () => { dropSlides(old); heroBusy = null; } });
+      tl.to($$('.ch', heroTitle), { scaleY: 0, transformOrigin: '50% 0%', duration: .45, stagger: .012, ease: 'power3.in' }, 0)
+        .fromTo(slide, { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 1.15, ease: 'expo.inOut' }, 0)
+        .fromTo($$('img', slide), { scaleY: 1.35, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 1.15, ease: 'expo.inOut' }, 0)
+        .to(old, { scaleY: .9, transformOrigin: '50% 0%', filter: 'brightness(.3)', duration: 1.15, ease: 'expo.inOut' }, 0)
+        .add(() => { heroTitle.innerHTML = html; }, .5)
+        .fromTo(() => $$('.ch', heroTitle), { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: .8, stagger: .025, ease: 'expo.out', immediateRender: false }, .5);
     };
     setHero(C[heroSeq[0]], false);
 

@@ -172,7 +172,7 @@ body.menu-open .link-plus .plus { transform: rotate(45deg); }
 }
 .hero__visual {
   position: absolute; left: 0; right: 0; margin: 0 auto; bottom: 0;
-  height: 86vh; aspect-ratio: 4/5; max-width: 92vw; cursor: pointer;
+  height: 86vh; aspect-ratio: 0.92; max-width: 94vw; cursor: pointer; background: #0c0c0c;
 }
 .hero__half { position: absolute; inset: 0; overflow: hidden; }
 .hero__half img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
@@ -543,3 +543,14 @@ body::after {
   .card__quick { display: none; }
 }
 .campaign .sec-head { padding-top: 58px; }
+
+/* hero slides (flip-up transition) */
+.hs { position: absolute; inset: 0; overflow: hidden; will-change: transform; }
+.hs__half { position: absolute; inset: 0; overflow: hidden; }
+.hs__half img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.hs__half--mono { filter: grayscale(1) contrast(1.05) brightness(1.08); }
+.hs__half--mono img { transform: translate(6px, -4px); }
+.hs__tear { position: absolute; top: 0; height: 100%; width: 40px; z-index: 2; pointer-events: none; overflow: visible; }
+.hs__tear path { fill: #f6f1ee; filter: drop-shadow(1px 0 1px rgba(0, 0, 0, .25)); }
+.hero__visual:hover .hs__half--color img { filter: saturate(1.15) brightness(1.05); }
+.hero__title .ch { will-change: transform; }
