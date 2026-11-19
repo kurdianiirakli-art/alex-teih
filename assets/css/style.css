@@ -558,3 +558,9 @@ body::after {
 /* hero tagline: more air between lines */
 .hero__tag { line-height: 1.04; }
 .hero__tag .line + .line { margin-top: .06em; }
+
+/* mobile: no brand/tagline block above the hero photo */
+@media (max-width: 760px) {
+  .hero__brand, .hero__tag { display: none; }
+  .hero__visual { height: calc(100% - 76px); max-height: 88vh; }
+}
