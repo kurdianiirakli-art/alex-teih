@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alex Teih — Couture, New York</title>
+  <meta name="description" content="Alex Teih — New York couture evening wear and cocktail dresses. Draping, drama and edgy romance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&family=Rock+Salt&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="is-loading">
+
+  <!-- ============ PRELOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__word">LOADING<span class="loader__dots"><i></i><i></i><i></i></span></div>
+    <div class="loader__pct"><span id="loaderPct">0</span>%</div>
+    <div class="loader__stack" id="loaderStack"></div>
+    <div class="loader__tag mono">[ COUTURE · NEW YORK ]</div>
+  </div>
+
+  <!-- ============ CURSOR ============ -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <span class="cursor__b">[</span>
+    <span class="cursor__txt"><em id="cur1">DRAG</em><em id="cur2">CLICK</em></span>
+    <span class="cursor__b">]</span>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <div class="header__left mono">
+      <button class="link-plus" id="menuBtn" aria-expanded="false" aria-controls="menu">MENU <span class="plus">+</span></button>
+      <a href="#collections" class="u-link">COLLECTIONS</a>
+      <a href="#about" class="u-link">ABOUT</a>
+      <span class="header__time" id="nyTime">NY 00:00</span>
+    </div>
+    <a href="#top" class="header__logo" aria-label="Alex Teih — home">ALEX TEIH</a>
+    <div class="header__right mono">
+      <a href="#contact" class="u-link">APPOINTMENT</a>
+      <a href="#contact" class="u-link">CONTACT</a>
+    </div>
+  </header>
+
+  <!-- ============ MENU OVERLAY ============ -->
+  <nav class="menu" id="menu" aria-label="Main menu">
+    <div class="menu__inner">
+      <ul class="menu__list" id="menuList">
+        <li><a href="#top"><span class="mono">01</span>HOME</a></li>
+        <li><a href="#looks"><span class="mono">02</span>LOOKS</a></li>
+        <li><a href="#campaign"><span class="mono">03</span>CAMPAIGN</a></li>
+        <li><a href="#collections"><span class="mono">04</span>COLLECTIONS</a></li>
+        <li><a href="#about"><span class="mono">05</span>ABOUT</a></li>
+        <li><a href="#atelier"><span class="mono">06</span>ATELIER</a></li>
+        <li><a href="#contact"><span class="mono">07</span>CONTACT</a></li>
+      </ul>
+      <div class="menu__side mono">
+        <p>(COLLECTIONS)</p>
+        <ul id="menuCollections"></ul>
+        <p class="menu__contact">
+          <a href="mailto:darrell@alexteih.com">DARRELL@ALEXTEIH.COM</a><br />
+          <a href="tel:+16466234643">646.623.4643</a>
+        </p>
+      </div>
+      <div class="menu__img"><img id="menuImg" src="assets/img/hc-1.jpg" alt="" /></div>
+    </div>
+  </nav>
+
+  <main id="top">
+
+    <!-- ============ 01 HERO ============ -->
+    <section class="hero" id="hero">
+      <h1 class="hero__brand display" data-split>ALEX TEIH</h1>
+      <p class="hero__tag display" data-split>WHERE DRAPING<br />MEETS DRAMA</p>
+
+      <div class="hero__visual" id="heroVisual" data-cursor="link" data-c1="SEE" data-c2="COLLECTION">
+        <div class="hero__half hero__half--color"><img id="heroImgA" src="assets/img/hc-1.jpg" alt="Alex Teih couture gown" /></div>
+        <div class="hero__half hero__half--mono" id="heroMono"><img id="heroImgB" src="assets/img/hc-1.jpg" alt="" aria-hidden="true" /></div>
+        <svg class="hero__tear" id="heroTear" viewBox="0 0 40 1000" preserveAspectRatio="none" aria-hidden="true"><path id="heroTearPath" /></svg>
+      </div>
+
+      <div class="hero__meta mono">
+        <span>(EST. NEW YORK)</span>
+        <span>(EVENING · COCKTAIL · BRIDAL)</span>
+        <ol class="hero__index" id="heroIndex"></ol>
+      </div>
+      <div class="hero__count mono"><span id="heroCount">01</span> / 06</div>
+
+      <div class="hero__bottom">
+        <div class="hero__title display" id="heroTitle" aria-live="polite">
+          <span class="hero__w1 accent">HAUTE</span> <span class="hero__w2">COUTURE</span>
+        </div>
+        <a href="collection.html?c=haute-couture" class="bracket-link mono" id="heroLink">[ SEE COLLECTION ]</a>
+      </div>
+      <div class="hero__scroll mono">SCROLL ↓</div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track display" id="marqueeTrack"></div>
+    </div>
+
+    <!-- ============ 02 LOOKS ============ -->
+    <section class="looks" id="looks">
+      <div class="sec-head">
+        <h2 class="sec-num mono accent">02. NEW LOOKS</h2>
+        <a href="#collections" class="bracket-link mono">[ SEE ALL ]</a>
+      </div>
+      <div class="looks__wrap">
+        <aside class="looks__aside mono">
+          <p>(NY)</p>
+          <ul id="looksLabels"></ul>
+        </aside>
+        <div class="drag-row" id="looksRow" data-cursor="drag">
+          <div class="drag-row__track" id="looksTrack"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 CAMPAIGN ============ -->
+    <section class="campaign" id="campaign" data-torn="top bottom">
+      <div class="sec-head sec-head--light">
+        <h2 class="sec-num mono accent">03. CAMPAIGN</h2>
+        <span class="mono">(NYC)</span>
+      </div>
+      <div class="campaign__media"><img src="assets/img/hero.jpg" alt="Alex Teih campaign — feathered couture gown" /></div>
+      <div class="campaign__shade"></div>
+      <div class="campaign__bottom">
+        <h3 class="campaign__title display"><span data-split>NEW</span> <span class="mono campaign__paren">( COUTURE )</span></h3>
+        <p class="campaign__quote mono">RATHER THAN FABRICATE A DESIGN, TEIH FIRST FINDS <span class="accent">FABRIC</span> AND THEN WORKS TO DISCOVER ITS <span class="accent">ESSENCE</span>.</p>
+      </div>
+      <div class="campaign__foot mono">
+        <span>(NEW YORK)</span>
+        <span>(FW_’26)</span>
+        <a href="collection.html?c=haute-couture" class="bracket-link">[ SEE CAMPAIGN ]</a>
+      </div>
+    </section>
+
+    <!-- ============ 04 COLLECTIONS ============ -->
+    <section class="cats" id="collections">
+      <div class="sec-head">
+        <h2 class="sec-num mono accent">04. COLLECTIONS</h2>
+        <a href="collection.html?c=ball-gown" class="bracket-link mono">[ SEE ALL ]</a>
+      </div>
+      <div class="drag-row" id="catsRow" data-cursor="drag" data-c1="DRAG" data-c2="OPEN">
+        <div class="drag-row__track" id="catsTrack"></div>
+      </div>
+    </section>
+
+    <!-- ============ 05 SPLIT ============ -->
+    <section class="split" id="split">
+      <div class="sec-head">
+        <h2 class="sec-num mono accent">05. SIGNATURE</h2>
+        <a href="collection.html?c=ball-gown" class="bracket-link mono">[ SEE COLLECTION ]</a>
+      </div>
+      <div class="split__grid">
+        <article class="split__item">
+          <p class="split__txt mono">A MASTER OF DRAPING, ALEX TEIH ACHIEVES <span class="accent">GRAND EFFECT</span><br />WITH SIMPLE GESTURES.</p>
+          <a href="collection.html?c=ball-gown" class="split__media tear-mask"><img src="assets/img/bg-25.jpg" alt="Ball gown in gold and black jacquard" /></a>
+          <div class="split__cap">
+            <h3 class="display">BALL GOWN <span class="mono">(GRAND)</span></h3>
+            <span class="mono">[ 30 ]</span>
+          </div>
+        </article>
+        <article class="split__item split__item--offset">
+          <p class="split__txt split__txt--right mono">IVORY LACE AND SCULPTED ORGANZA —<br />AN AURA OF <span class="accent">EDGY ROMANCE</span>.</p>
+          <a href="collection.html?c=white-nights" class="split__media tear-mask"><img src="assets/img/wn-6.jpg" alt="White Nights ivory gown" /></a>
+          <div class="split__cap">
+            <h3 class="display">WHITE NIGHTS <span class="mono">(BRIDAL)</span></h3>
+            <span class="mono">[ 07 ]</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 06 ABOUT (pinned) ============ -->
+    <section class="about" id="about">
+      <div class="about__pin" id="aboutPin">
+        <div class="about__corner about__corner--tl">
+          <h2 class="display">DRAPING<span class="mono">(MASTER)</span></h2>
+        </div>
+        <p class="about__corner about__corner--tr mono">EUROPEAN HERITAGE.<br />A BACKGROUND IN <span class="accent">CINEMA</span><br />AND COSTUME DESIGN.</p>
+        <div class="about__graffiti" aria-hidden="true">edgy romance</div>
+        <figure class="about__portrait" id="aboutPortrait">
+          <img src="assets/img/designer.jpg" alt="Designer Alex Teih in his New York studio" />
+        </figure>
+        <div class="about__seal about__seal--l mono" aria-hidden="true">AT</div>
+        <div class="about__seal about__seal--r mono" aria-hidden="true">NY</div>
+        <p class="about__corner about__corner--bl mono">BASED IN <span class="accent">NEW YORK</span>, ALEX TEIH IS KNOWN FOR HIS COUTURE EVENING WEAR AND COCKTAIL DRESSES — MODERN, FLIRTATIOUS, WITH A POLISHED <span class="accent">SOPHISTICATION</span>.</p>
+        <div class="about__corner about__corner--br">
+          <h2 class="display"><span class="mono">(EDGY)</span>ROMANCE<span class="accent">.</span></h2>
+        </div>
+      </div>
+      <div class="about__text">
+        <span class="mono accent">06. ABOUT ALEX TEIH</span>
+        <div class="about__cols" id="aboutCols"></div>
+        <a href="#contact" class="bracket-link mono">[ BOOK AN APPOINTMENT ]</a>
+      </div>
+    </section>
+
+    <!-- ============ 07 ATELIER (dive) ============ -->
+    <section class="atelier" id="atelier">
+      <div class="atelier__head">
+        <span class="mono accent">07. THE ATELIER</span>
+        <h2 class="display" data-split>A VISION IN FABRIC<span class="accent">.</span></h2>
+        <p class="mono">EVERY GOWN BEGINS IN THE NEW YORK STUDIO. TEIH FIRST FINDS THE <span class="accent">FABRIC</span>, THEN DRAPES IT ON THE FORM UNTIL ITS <span class="accent">ESSENCE</span> APPEARS — TAILORED BODICES HIDDEN WITHIN EVERY LAYERED SKIRT AND HEM.</p>
+        <a href="#contact" class="bracket-link mono">[ VISIT THE STUDIO ]</a>
+      </div>
+      <div class="atelier__stage" id="atelierStage">
+        <div class="atelier__frame" id="atelierFrame">
+          <img src="assets/img/atelier.jpg" alt="Alex Teih atelier showroom in New York" />
+          <div class="atelier__overlay display" id="atelierOverlay">MADE IN<br />NEW YORK<span class="accent">.</span></div>
+        </div>
+        <p class="atelier__tip mono">TIP: SCROLL TO DIVE</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER / CONTACT ============ -->
+  <footer class="footer" id="contact">
+    <div class="footer__tear" aria-hidden="true"></div>
+    <div class="footer__inner">
+      <div class="footer__top mono">
+        <div class="footer__col">
+          <a href="#top" class="u-link">HOME</a>
+          <a href="#collections" class="u-link">COLLECTIONS</a>
+          <a href="#about" class="u-link">ABOUT</a>
+          <a href="#atelier" class="u-link">ATELIER</a>
+        </div>
+        <div class="footer__col" id="footerCollections"></div>
+        <div class="footer__col">
+          <a href="mailto:darrell@alexteih.com" class="u-link">DARRELL@ALEXTEIH.COM</a>
+          <a href="tel:+16466234643" class="u-link">646.623.4643</a>
+          <span>NEW YORK, NY</span>
+        </div>
+        <div class="footer__col">
+          <a href="https://www.instagram.com/alexteih_studio/" target="_blank" rel="noopener" class="u-link">INSTAGRAM</a>
+          <a href="https://www.facebook.com/profile.php?id=100089235987327" target="_blank" rel="noopener" class="u-link">FACEBOOK</a>
+        </div>
+      </div>
+
+      <div class="footer__mid">
+        <div class="footer__big display" aria-hidden="true">ALEX TEIH</div>
+        <img class="footer__cut" src="assets/img/ee-4.jpg" alt="" />
+        <form class="appt" id="apptForm" novalidate>
+          <h3 class="display">APPOINTMENT <span class="mono">(PRIVATE FITTING)</span></h3>
+          <label class="appt__field"><span class="mono">NAME</span><input name="name" required autocomplete="name" /></label>
+          <label class="appt__field"><span class="mono">EMAIL</span><input name="email" type="email" required autocomplete="email" /></label>
+          <label class="appt__field"><span class="mono">MESSAGE</span><textarea name="message" rows="2"></textarea></label>
+          <button type="submit" class="appt__btn mono">[ SEND REQUEST ]</button>
+          <p class="appt__note mono" id="apptNote" role="status"></p>
+        </form>
+      </div>
+
+      <div class="footer__bottom mono">
+        <span>© <span id="year"></span> ALEX TEIH</span>
+        <span>COUTURE · EVENING · COCKTAIL</span>
+        <a href="#top" class="u-link">BACK TO TOP ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Look viewer">
+    <button class="lightbox__close mono" id="lbClose">[ CLOSE ]</button>
+    <button class="lightbox__nav lightbox__nav--prev mono" id="lbPrev" aria-label="Previous">←</button>
+    <figure class="lightbox__fig"><img id="lbImg" src="" alt="" /><figcaption class="mono" id="lbCap"></figcaption></figure>
+    <button class="lightbox__nav lightbox__nav--next mono" id="lbNext" aria-label="Next">→</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
