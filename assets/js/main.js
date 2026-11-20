@@ -322,8 +322,14 @@
       const right = pts.map(([t, r], i) => [left[i][0] + 4 + ((i * 7) % 5), t * 1000]).reverse();
       $('path', el).setAttribute('d', 'M' + [...left, ...right].map(p => p.join(',')).join('L') + 'Z');
       $('.hs__tear', el).style.left = (cx - 20) + 'px';
-      const poly = pts.map(([t, r], i) => `${cx - 10 + r * 18 + 4 + ((i * 7) % 5)}px ${t * H}px`);
-      $('.hs__half--mono', el).style.clipPath = `polygon(${poly.join(',')}, ${W}px ${H}px, ${W}px 0px)`;
+      // black & white always takes the smaller side of the tear, so most of the model stays in colour
+      if (+el.dataset.tear < .5) {
+        const poly = pts.map(([t, r]) => `${cx - 10 + r * 18 + 2}px ${t * H}px`); // follows the strip's left edge
+        $('.hs__half--mono', el).style.clipPath = `polygon(0px 0px, ${poly.join(',')}, 0px ${H}px)`;
+      } else {
+        const poly = pts.map(([t, r], i) => `${cx - 10 + r * 18 + 4 + ((i * 7) % 5)}px ${t * H}px`);
+        $('.hs__half--mono', el).style.clipPath = `polygon(${poly.join(',')}, ${W}px ${H}px, ${W}px 0px)`;
+      }
     };
     addEventListener('resize', () => $$('.hs', visual).forEach(buildTear));
 
@@ -458,9 +464,7 @@
       gsap.from('#looksTrack .card', { y: 80, opacity: 0, duration: 1.2, stagger: .06, ease: 'expo.out', scrollTrigger: { trigger: '#looks', start: 'top 75%' } });
       gsap.from('#catsTrack .cat', { y: 80, opacity: 0, duration: 1.2, stagger: .06, ease: 'expo.out', scrollTrigger: { trigger: '#collections', start: 'top 75%' } });
 
-      // campaign parallax + title
-      gsap.fromTo('.campaign__media', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '#campaign', start: 'top bottom', end: 'bottom top', scrub: true } });
-      gsap.fromTo('.campaign__media img', { scale: 1.25 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '#campaign', start: 'top bottom', end: 'center center', scrub: true } });
+      // campaign title (the photo itself is now a pinned scroll animation: assets/js/campaign-scroll.js)
       gsap.from('.campaign__title .line > span', { yPercent: 110, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.campaign__bottom', start: 'top 85%' } });
       gsap.from(['.campaign__paren', '.campaign__quote', '.campaign__foot'], { opacity: 0, y: 20, duration: 1, stagger: .1, scrollTrigger: { trigger: '.campaign__bottom', start: 'top 85%' } });
 
@@ -477,19 +481,22 @@
         const tl = gsap.timeline({ scrollTrigger: { trigger: '#aboutPin', start: 'top top', end: '+=140%', pin: true, scrub: 1 } });
         tl.fromTo('#aboutPortrait', { width: '22vw', rotate: -3 }, { width: '58vw', rotate: 0, ease: 'none' })
           .fromTo('.about__graffiti', { scale: .6, opacity: 0 }, { scale: 1.25, opacity: .9, ease: 'none' }, 0)
+          // the signature is written over the photo; once the photo has grown big, it comes forward
+          // and the signature goes behind it (and back in front when scrolling up)
+          .set('.about__graffiti', { zIndex: 1 }, .3)
           .fromTo('.about__corner--tl', { x: 0 }, { x: -40, ease: 'none' }, 0)
           .fromTo('.about__corner--br', { x: 0 }, { x: 40, ease: 'none' }, 0)
           .to('.about__seal', { rotate: 360, ease: 'none' }, 0);
 
         // atelier dive
         const at = gsap.timeline({ scrollTrigger: { trigger: '#atelierStage', start: 'top top', end: '+=150%', pin: true, scrub: 1 } });
-        at.to('#atelierFrame', { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none' })
+        at.to('#atelierFrame', { '--mw': '140%', '--mh': '140%', ease: 'none' }) // the brush-stroke window grows past the screen edges
           .to('#atelierFrame img', { scale: 1, ease: 'none' }, 0)
           .to('.atelier__tip', { opacity: 0, ease: 'none' }, 0)
           .to('#atelierOverlay', { opacity: 1, y: 0, ease: 'none' }, .55);
       });
       mm.add('(max-width: 760px)', () => {
-        gsap.to('#atelierFrame', { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', scrollTrigger: { trigger: '#atelierStage', start: 'top 80%', end: 'center center', scrub: true } });
+        gsap.to('#atelierFrame', { '--mw': '140%', '--mh': '140%', ease: 'none', scrollTrigger: { trigger: '#atelierStage', start: 'top 80%', end: 'center center', scrub: true } });
         gsap.to('#atelierOverlay', { opacity: 1, scrollTrigger: { trigger: '#atelierStage', start: 'center 70%' } });
       });
 

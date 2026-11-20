@@ -611,3 +611,40 @@ body::after {
 @media (max-width: 760px) {
   .hs__img { height: 82%; }
 }
+
+/* ==========================================================
+   campaign: pinned scroll animation (assets/js/campaign-scroll.js)
+   The section is taller than the screen; its content sticks while the model moves with the scroll.
+   overflow: clip (not hidden) so the sticky layer keeps working.
+   ========================================================== */
+.campaign { height: 260vh; min-height: 0; overflow: clip; }
+.campaign__sticky { position: sticky; top: 0; height: 100vh; min-height: 640px; overflow: hidden; }
+.campaign__media { inset: 0; }
+.campaign__canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .4s; }
+.campaign__canvas.is-live { opacity: 1; }
+@media (max-width: 760px) { .campaign { height: 220vh; } }
+@media (prefers-reduced-motion: reduce) { .campaign { height: 100vh; } }
+/* the campaign text rises together while the model moves (--rise set by campaign-scroll.js).
+   "translate" (not transform) so it adds to the GSAP reveal animations on the same elements */
+.campaign .sec-head, .campaign__bottom, .campaign__foot { translate: 0 calc(var(--rise, 0px) * -1) !important; } /* !important: GSAP writes an inline "translate: none" on the elements it fades in */
+
+/* ==========================================================
+   painted edges: the designer portrait and the atelier window look brushed onto canvas
+   (assets/img/brush-mask*.svg: overlapping strokes with dry-brush edges).
+   The atelier window grows through the mask size (--mw / --mh, animated in main.js) instead of clip-path.
+   ========================================================== */
+.about__portrait {
+  box-shadow: none;
+  -webkit-mask: url(../img/brush-mask.svg) center / 100% 100% no-repeat;
+          mask: url(../img/brush-mask.svg) center / 100% 100% no-repeat;
+}
+.atelier__frame {
+  --mw: 46%; --mh: 72%; clip-path: none;
+  -webkit-mask: url(../img/brush-mask-2.svg) center / var(--mw) var(--mh) no-repeat;
+          mask: url(../img/brush-mask-2.svg) center / var(--mw) var(--mh) no-repeat;
+}
+@media (max-width: 760px) { .atelier__frame { --mw: 88%; --mh: 80%; clip-path: none; } }
+
+/* the graffiti line is now Alex Teih's signature: written across the lower part of the portrait,
+   on top of it, like a painter signing the canvas (same font, colour and tilt) */
+.about__graffiti { top: 66%; z-index: 4; }
